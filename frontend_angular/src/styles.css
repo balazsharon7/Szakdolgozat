@@ -1,0 +1,123 @@
+
+
+.btn {
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s ease-in-out;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  
+
+  .btn-outline-danger {
+    border: 1px solid #dc3545;
+    color: #dc3545;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+
+  .btn-outline-primary {
+    border: 1px solid #007bff;
+    color: #007bff;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+
+  .btn-outline-success {
+    border: 1px solid #28a745;
+    color: #28a745;
+  }
+  
+  .btn-outline-success:hover {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+
+  .btn-outline-secondary {
+    border: 1px solid #6c757d;
+    color: #6c757d;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+  }
+  
+  .modal.fade.show {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-title {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .modal-body textarea {
+    resize: none;
+    font-size: 0.95rem;
+  }
+  
+  .modal-footer button {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+  
+
+  .card {
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .card-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+
+  @media (max-width: 768px) {
+    .card {
+      margin-bottom: 20px;
+    }
+  
+    .modal-dialog {
+      width: 90%;
+    }
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-image: url('assets/x4aqrc_1.jpg'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    background-position: center; 
+  }
+  
+  
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

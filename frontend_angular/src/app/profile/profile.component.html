@@ -1,0 +1,419 @@
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="text-center text-primary mb-4">Profilom</h2>
+      <div class="mb-4">
+        <p><strong>Felhasználónév:</strong> {{ username }}</p>
+        <button class="btn btn-outline-primary" (click)="toggleEditProfile()" *ngIf="role === 'BUSINESS'">Adatok Módosítása</button>
+        <button
+          *ngIf="role === 'BUSINESS'"
+          class="btn btn-outline-primary"
+          (click)="toggleNewProvisionForm()">
+          {{ isAddingProvision ? 'Hirdetés Hozzáadása Bezárása' : 'Hirdetés Hozzáadása' }}
+        </button>
+      </div>
+
+        <div *ngIf="isEditing || role === 'CUSTOMER'" class="card border-0 shadow-sm mt-4">
+          <div class="card-body">
+            <h3 class="text-center text-primary mb-4">Adatok Módosítása</h3>
+            <form (ngSubmit)="saveProfile()">
+            
+              <div class="mb-3">
+                <label for="email" class="form-label">E-mail:</label>
+                <input
+                  id="email"
+                  type="email"
+                  [(ngModel)]="profile.email"
+                  name="email"
+                  class="form-control"
+                  required
+                  placeholder="Adja meg az e-mail címét"
+                />
+              </div>
+        
+            
+              <div class="mb-3">
+                <label for="password" class="form-label">Új Jelszó:</label>
+                <input
+                  id="password"
+                  type="password"
+                  [(ngModel)]="profile.password"
+                  name="password"
+                  class="form-control"
+                  required
+                  placeholder="Adja meg az új jelszót"
+                />
+              </div>
+
+              
+        
+      
+              <div class="d-flex justify-content-center gap-3 mt-4">
+                <button type="submit" class="btn btn-outline-primary">Mentés</button>
+                <button type="button" (click)="toggleEditProfile()" class="btn btn-outline-secondary" *ngIf="role === 'BUSINESS'">Mégse</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div *ngIf="role === 'CUSTOMER'">
+          <div *ngIf="finalizedBookings && finalizedBookings.length > 0; else noFinalizedBookings">
+            <h3 class="text-primary">Véglegesített foglalásaim</h3>
+            <ul class="list-group">
+              <li *ngFor="let booking of finalizedBookings" class="list-group-item">
+                <p><strong>Hirdetés neve:</strong> {{ booking.provision?.name }}</p>
+                <p><strong>Szolgáltatás kezdete:</strong> {{ booking.bookingTime | date: 'short' }}</p>
+                <button
+                  class="btn btn-outline-primary mt-2"
+                  (click)="toggleReviewForm(booking.id)">
+                  Értékelés hozzáadása
+                </button>
+        
+              
+                <div *ngIf="showReviewForm[booking.id]" class="mt-3">
+                  <form (ngSubmit)="submitReview(booking.id)">
+                    <div class="mb-3">
+                      <label for="rating" class="form-label">Értékelés (1-5):</label>
+                      <select
+                        id="rating"
+                        [(ngModel)]="newReview.rating"
+                        name="rating"
+                        class="form-select"
+                        required>
+                        <option *ngFor="let star of [1, 2, 3, 4, 5]" [value]="star">{{ star }}</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="comment" class="form-label">Megjegyzés:</label>
+                      <textarea
+                        id="comment"
+                        [(ngModel)]="newReview.comment"
+                        name="comment"
+                        class="form-control"
+                        rows="3"
+                        required></textarea>
+                    </div>
+                    <div class="text-end">
+                      <button type="submit" class="btn btn-primary">Mentés</button>
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="toggleReviewForm(booking.id)">
+                        Mégse
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <ng-template #noFinalizedBookings>
+            <p class="text-muted">Nincsenek véglegesített foglalások.</p>
+          </ng-template>
+        </div>
+        
+        
+        
+        
+
+        
+        <div *ngIf="isAddingProvision && role === 'BUSINESS'" class="card border-0 shadow-sm mt-4">
+          <div class="card-body">
+            <h3 class="text-center text-primary mb-4">Új Hirdetés Létrehozása</h3>
+            <form (ngSubmit)="createProvision()">
+            
+
+              <div class="mb-3">
+                <label for="provisionName" class="form-label">Név:</label>
+                <input
+                  id="provisionName"
+                  type="text"
+                  [(ngModel)]="newProvision.name"
+                  name="name"
+                  class="form-control"
+                  required
+                  placeholder="Adja meg a hirdetés nevét"
+                />
+              </div>
+        
+              <div class="mb-3">
+                <label for="provisionDescription" class="form-label">Leírás:</label>
+                <textarea
+                  id="provisionDescription"
+                  [(ngModel)]="newProvision.description"
+                  name="description"
+                  rows="4"
+                  class="form-control"
+                  required
+                  placeholder="Adja meg a hirdetés leírását"
+                ></textarea>
+              </div>
+        
+            
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="provisionPrice" class="form-label">Ár (Ft):</label>
+                  <input
+                    id="provisionPrice"
+                    type="number"
+                    [(ngModel)]="newProvision.price"
+                    name="price"
+                    class="form-control"
+                    required
+                    placeholder="Adja meg az árat"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="provisionDuration" class="form-label">Időtartam (perc):</label>
+                  <input
+                    id="provisionDuration"
+                    type="number"
+                    [(ngModel)]="newProvision.duration"
+                    name="duration"
+                    class="form-control"
+                    required
+                    placeholder="Adja meg az időtartamot"
+                  />
+                </div>
+              </div>
+        
+              
+              <div class="mb-3">
+                <label for="provisionProvider" class="form-label">Szolgáltató:</label>
+                <input
+                  id="provisionProvider"
+                  type="text"
+                  [(ngModel)]="newProvision.provider"
+                  name="provider"
+                  class="form-control"
+                  required
+                  placeholder="Adja meg a szolgáltatót"
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="provisionImage" class="form-label">Kép feltöltése:</label>
+                <input
+                  id="provisionImage"
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="form-control"
+                />
+              </div>
+        
+      
+              <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-outline-primary">Mentés</button>
+                <button type="button" (click)="toggleNewProvisionForm()" class="btn btn-outline-secondary">Mégse</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div *ngIf="selectedProvision" class="card mt-4 shadow-sm">
+          <div class="card-body">
+            <h3 class="text-center text-primary mb-4">Hirdetés szerkesztése</h3>
+            <form (ngSubmit)="saveProvision()">
+              <div class="mb-3">
+                <label for="edit-name" class="form-label">Név:</label>
+                <input
+                  id="edit-name"
+                  type="text"
+                  [(ngModel)]="selectedProvision.name"
+                  name="name"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="edit-description" class="form-label">Leírás:</label>
+                <textarea
+                  id="edit-description"
+                  [(ngModel)]="selectedProvision.description"
+                  name="description"
+                  rows="3"
+                  class="form-control"
+                  required
+                ></textarea>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="edit-price" class="form-label">Ár (Ft):</label>
+                  <input
+                    id="edit-price"
+                    type="number"
+                    [(ngModel)]="selectedProvision.price"
+                    name="price"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="edit-duration" class="form-label">Időtartam (perc):</label>
+                  <input
+                    id="edit-duration"
+                    type="number"
+                    [(ngModel)]="selectedProvision.duration"
+                    name="duration"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="edit-provider" class="form-label">Szolgáltató:</label>
+                <input
+                  id="edit-provider"
+                  type="text"
+                  [(ngModel)]="selectedProvision.provider"
+                  name="provider"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-outline-primary">Mentés</button>
+                <button type="button" (click)="cancelEdit()" class="btn btn-outline-secondary">Mégse</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <div class="container my-4">
+          <h2 class="text-center text-primary mb-4" *ngIf="role === 'BUSINESS'">Hirdetéseim</h2>
+          <ul class="list-group">
+            <li *ngFor="let provision of provisions" class="list-group-item mb-3 shadow-sm">
+              <div>
+                <h3 class="text-primary">{{ provision.name }}</h3>
+                <p>{{ provision.description }}</p>
+                <p><strong>Ár:</strong> {{ provision.price }} Ft</p>
+                <p><strong>Időtartam:</strong> {{ provision.duration }} perc</p>
+        
+              
+                <div class="mt-3" *ngIf="role === 'BUSINESS'">
+                  <h4 class="text-left text-primary mb-4">Foglalások:</h4>
+                  <ul *ngIf="provision.provisionId && bookingsByProvision[provision.provisionId]" class="list-group mb-3">
+                    <li
+                      *ngFor="let booking of bookingsByProvision[provision.provisionId]"
+                      class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      <div>
+                        <p>
+                          Felhasználónév: {{ booking.username || 'Ismeretlen' }} -
+                          Időpont: {{ booking.bookingTime | date: 'short' }}
+                          <span *ngIf="booking.status === 'FINALIZED'" class="text-success ms-2">
+                            ✔️
+                          </span>
+                          
+                        </p>
+                      </div>
+                      <button class="btn btn-outline-danger" (click)="deleteBooking(booking.id, provision.provisionId)">Foglalás törlése</button>
+                    </li>
+                  </ul>
+                  <p *ngIf="provision.provisionId && (!bookingsByProvision[provision.provisionId]?.length)" class="text-muted">
+                    Nincsenek foglalások.
+                  </p>
+                </div>
+          
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                  <button
+    class="btn btn-outline-primary"
+    (click)="editProvision(provision)"
+  >
+    Szerkesztés
+  </button>
+                  <button
+                  class="btn btn-outline-danger"
+                    *ngIf="provision.provisionId !== undefined"
+                    (click)="confirmDelete(provision.provisionId)"
+                  >
+                    Hirdetés törlése
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+  
+          <div class="container my-4" *ngIf="role === 'BUSINESS'">
+            <h2 class="text-center text-primary mb-4">Foglalások a hirdetéseimre</h2>
+            <ul class="list-group">
+              <li *ngFor="let booking of bookingsAsCreator" class="list-group-item">
+                <div>
+                  <p><strong>Felhasználónév:</strong> {{ booking.username }}</p>
+                  <p><strong>Időpont:</strong> {{ booking.bookingTime | date: 'short' }}</p>
+                  <button
+                    *ngIf="booking.status !== 'FINALIZED'"
+                    class="btn btn-outline-primary"
+                    (click)="toggleFinalizeForm(booking)"
+                  >
+                    Foglalás véglegesítése
+                  </button>
+                  <button
+                    *ngIf="booking.status === 'FINALIZED'"
+                    class="btn btn-success"
+                    disabled
+                  >
+                    Foglalás véglegesítve
+                  </button>
+                </div>
+          
+           
+                <div *ngIf="selectedFinalizeBooking === booking" class="mt-3">
+                  <div class="card shadow-sm">
+                    <div class="card-body">
+                      <h5 class="text-primary">Foglalás véglegesítése</h5>
+                      <form (ngSubmit)="finalizeBookingDate()">
+                        <div class="mb-3">
+                          <label for="finalize-date" class="form-label">Véglegesítési időpont:</label>
+                          <p-calendar
+                            [(ngModel)]="finalizeDate"
+                            name="finalizeDate"
+                            [showTime]="true"
+                            [hourFormat]="'24'"
+                            dateFormat="yy-mm-dd"
+                            appendTo="body"
+                          ></p-calendar>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <button type="submit" class="btn btn-outline-primary">Véglegesítés</button>
+                          <button type="button" class="btn btn-outline-secondary" (click)="cancelFinalize()">Mégse</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <p *ngIf="!bookingsAsCreator.length" class="text-muted text-center mt-3">
+              Nincsenek foglalások az Ön hirdetéseire.
+            </p>
+          </div>
+          
+          
+
+  
+        <div *ngIf="selectedBooking" class="card mt-4 shadow-sm">
+          <div class="card-body">
+            <h3 class="text-center text-warning mb-4">Foglalási időpont módosítása</h3>
+            <form (ngSubmit)="updateBookingDate()">
+              <div class="mb-3">
+                <label for="booking-date" class="form-label">Új időpont:</label>
+                <p-calendar
+                  [(ngModel)]="selectedDate"
+                  name="finalizeDate"
+                  [showTime]="true"
+                  [hourFormat]="'24'"
+                ></p-calendar>
+              </div>
+              <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-outline-primary">Mentés</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="cancelEditBooking()">Mégse</button>
+              </div>
+            </form>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>

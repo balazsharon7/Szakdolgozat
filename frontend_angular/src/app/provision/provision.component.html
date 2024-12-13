@@ -1,0 +1,193 @@
+<div class="container my-5">
+    
+
+  <div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">Hirdetések</h2>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="applyFilters()">
+    
+        <div class="mb-3">
+          <label for="searchName" class="form-label">Hirdetés neve:</label>
+          <input
+            type="text"
+            id="searchName"
+            [(ngModel)]="filters.name"
+            name="name"
+            class="form-control"
+            placeholder="Pl. Burkolás"
+          />
+        </div>
+  
+      
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="toggleDetailedFilters()">
+            {{ showDetailedFilters ? 'Részletes szűrők elrejtése' : 'Részletes szűrők megjelenítése' }}
+          </button>
+  
+      
+          <div *ngIf="showDetailedFilters" class="border rounded p-3 bg-light">
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="minPrice" class="form-label">Minimum ár:</label>
+                <input
+                  type="number"
+                  id="minPrice"
+                  [(ngModel)]="filters.minPrice"
+                  name="minPrice"
+                  class="form-control"
+                  placeholder="Min. ár"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="maxPrice" class="form-label">Maximum ár:</label>
+                <input
+                  type="number"
+                  id="maxPrice"
+                  [(ngModel)]="filters.maxPrice"
+                  name="maxPrice"
+                  class="form-control"
+                  placeholder="Max. ár"
+                />
+              </div>
+            </div>
+  
+            
+            <div class="mb-3">
+              <label for="searchProvider" class="form-label">Szolgáltató neve:</label>
+              <input
+                type="text"
+                id="searchProvider"
+                [(ngModel)]="filters.provider"
+                name="provider"
+                class="form-control"
+                placeholder="Pl. Kisvállalkozó"
+              />
+            </div>
+          </div>
+  
+        
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-outline-secondary">Szűrés</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="resetFilters()">Alapértelmezett</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+  
+    <div class="row g-4">
+      <div *ngFor="let provision of filteredProvisions" class="col-md-6">
+        <div class="card shadow h-100">
+     
+          <div class="card-body">
+            
+        
+           
+            
+
+
+            
+            <h3 class="card-title text-primary">{{ provision.name }}</h3>
+      
+            <p class="card-text">{{ provision.description }}</p>
+            <p><strong>Ár:</strong> {{ provision.price }} Ft</p>
+            <p><strong>Időtartam:</strong> {{ provision.duration }} perc</p>
+            <p><strong>Szolgáltató:</strong> {{ provision.provider }}</p>
+            <div *ngIf="provision.imageUrl" class="card-img-top">
+              <img [src]="provision.imageUrl" alt="{{ provision.name }}" class="img-fluid" />
+            </div>
+  
+         
+            <div *ngIf="provision.provisionId">
+              <strong>Átlagos Értékelés:</strong>
+              <span *ngIf="reviews[provision.provisionId] && reviews[provision.provisionId].length > 0">
+                {{ calculateAverageRating(provision.provisionId) }}
+              </span>
+              <span *ngIf="!reviews[provision.provisionId] || reviews[provision.provisionId].length === 0">
+                Nincs értékelés
+              </span>
+            </div>
+  
+         
+           <div class="d-flex gap-2 mt-3">
+            <button
+              *ngIf="provision.provisionId !== undefined"
+              (click)="createBooking(provision)"
+              [disabled]="isProvisionBooked(provision.provisionId!)"
+              class="btn"
+              [ngClass]="{
+                'btn-danger': isProvisionBooked(provision.provisionId!),
+                'btn-primary': !isProvisionBooked(provision.provisionId!)
+              }">
+              {{ isProvisionBooked(provision.provisionId!) ? 'Lefoglalva' : 'Foglalás' }}
+            </button>
+            <button class="btn btn-outline-primary" (click)="toggleReviews(provision.provisionId!)">
+              Értékelések megtekintése
+            </button>
+            <button class="btn btn-outline-primary" (click)="toggleReviewForm(provision.provisionId!)">
+              Értékelés Hozzáadása
+            </button>
+          </div>
+        </div>
+        
+  
+        <div *ngIf="provision.provisionId && visibleReviews[provision.provisionId!]" class="mt-4">
+          <div *ngIf="reviews[provision.provisionId!] && reviews[provision.provisionId!]!.length > 0; else noReviews">
+            <div *ngFor="let review of reviews[provision.provisionId!]" class="card mb-3 shadow-sm">
+              <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <strong class="text-white">{{ review.userName }}</strong>
+                <span class="star-rating text-warning">
+                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                    <i class="fa" [ngClass]="star <= review.rating ? 'fa-star' : 'fa-star-o'"></i>
+                  </ng-container>
+                </span>
+              </div>
+              <div class="card-body">
+                <p class="text-secondary mb-0">{{ review.comment }}</p>
+              </div>
+            </div>
+          </div>
+          <ng-template #noReviews>
+            <p class="text-muted">Még nincsenek értékelések.</p>
+          </ng-template>
+        </div>
+        
+
+<div *ngIf="provision.provisionId && showReviewForm[provision.provisionId!]" class="card mt-4 shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h4 class="mb-0">Értékelés hozzáadása</h4>
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="createReview(provision.provisionId!)">
+      <div class="mb-3">
+        <label for="rating" class="form-label">Értékelés (1-5):</label>
+        <select
+          id="rating"
+          [(ngModel)]="newReview.rating"
+          name="rating"
+          class="form-select"
+          required>
+          <option *ngFor="let star of [1, 2, 3, 4, 5]" [value]="star">{{ star }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="comment" class="form-label">Megjegyzés:</label>
+        <textarea
+          id="comment"
+          [(ngModel)]="newReview.comment"
+          name="comment"
+          class="form-control"
+          rows="3"
+          required></textarea>
+      </div>
+      <div class="text-end">
+        <button type="submit" class="btn btn-outline-primary">Mentés</button>
+      </div>
+    </form>
+  </div>
+</div>

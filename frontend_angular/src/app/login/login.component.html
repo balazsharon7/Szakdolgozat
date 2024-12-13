@@ -1,0 +1,50 @@
+<div class="container d-flex align-items-center justify-content-center vh-100">
+  <div class="card shadow-lg p-4 w-100" style="max-width: 400px;">
+    <div *ngIf="isSuccessful" id="successMessage" class="alert alert-success text-center">
+      <h3 class="mb-0">{{ successfulMessage }}</h3>
+    </div>
+
+    <div *ngIf="isErrorMessage" id="errorMessage" class="alert alert-danger text-center">
+      <h3 class="mb-0">{{ errorMessage }}</h3>
+    </div>
+
+    <h1 class="text-center text-primary mb-4">Bejelentkezés</h1>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <div class="form-group mb-3">
+        <label for="username" class="form-label">Felhasználónév:</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          class="form-control"
+          [ngClass]="{'is-invalid': f['username'].invalid && (f['username'].dirty || f['username'].touched)}"
+        />
+        <div *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+          Felhasználónév megadása kötelező.
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="password" class="form-label">Jelszó:</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [ngClass]="{'is-invalid': f['password'].invalid && (f['password'].dirty || f['password'].touched)}"
+        />
+        <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="invalid-feedback">
+          Jelszó megadása kötelező.
+        </div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Bejelentkezés</button>
+      </div>
+    </form>
+  </div>
+</div>

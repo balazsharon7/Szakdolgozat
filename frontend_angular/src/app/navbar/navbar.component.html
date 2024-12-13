@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-dark custom-bg">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">VállalkozókTere</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/">Főoldal</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn()">
+          <a class="nav-link" routerLink="/login">Bejelentkezés</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn()">
+          <a class="nav-link" routerLink="/register">Regisztráció</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/provision">Hirdetések</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/bookings">Foglalásaim</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/profile">Profil</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/messages">Üzenetek</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <button class="btn btn-danger nav-link text-white" (click)="logout()">Kijelentkezés</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

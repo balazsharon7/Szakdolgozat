@@ -1,0 +1,59 @@
+<div class="container mt-5">
+  <h2 class="text-center text-primary mb-4">Függőben lévő foglalásaim</h2>
+
+  <div *ngIf="bookings.length === 0" class="alert alert-warning text-center">
+    <i class="bi bi-info-circle-fill"></i> Nincsenek foglalások.
+  </div>
+
+  <div class="row">
+    <ng-container *ngFor="let booking of bookings">
+      <div
+        class="col-md-4 mb-4"
+        *ngIf="booking.provision?.name && booking.provision?.description && booking.provision?.price && booking.bookingTime"
+      >
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary">{{ booking.provision?.name }}</h5>
+            <p class="card-text text-muted">
+              <strong>Leírás:</strong> {{ booking.provision?.description }}<br>
+              <strong>Ár:</strong> {{ booking.provision?.price }} Ft<br>
+              <strong>Időtartam:</strong> {{ booking.provision?.duration }} perc<br>
+              <strong>Szolgáltató:</strong> {{ booking.provision?.provider }}<br>
+              <strong>Foglalás ideje:</strong> {{ booking.bookingTime | date: 'dd MMMM yyyy HH:mm' }}
+            </p>
+            <div class="d-flex justify-content-between">
+              <button (click)="deleteBooking(booking.id)" class="btn btn-outline-danger">
+                <i class="bi bi-trash"></i> Foglalás törlése
+              </button>
+              <button (click)="openMessageDialog(booking.id)" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-envelope"></i> Üzenet küldése
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div *ngIf="showMessageDialog" class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary">Üzenet küldése</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeMessageDialog()"></button>
+        </div>
+        <div class="modal-body">
+          <textarea [(ngModel)]="messageContent" class="form-control" rows="4" placeholder="Írja ide az üzenetét..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button (click)="sendMessage()" class="btn btn-outline-success">
+            <i class="bi bi-send"></i> Küldés
+          </button>
+          <button (click)="closeMessageDialog()" class="btn btn-outline-secondary">
+            <i class="bi bi-x-circle"></i> Mégse
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

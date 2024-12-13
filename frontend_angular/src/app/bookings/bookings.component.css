@@ -1,0 +1,78 @@
+
+.container {
+  max-width: 1200px;
+}
+
+.card {
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Gombok */
+.btn-outline-danger {
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-outline-primary {
+  border: 1px solid #007bff;
+  color: #007bff;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.modal.fade.show {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.modal-body textarea {
+  resize: none;
+  font-size: 0.95rem;
+}
+
+.modal-footer button {
+  font-size: 0.9rem;
+  padding: 8px 15px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 20px;
+  }
+
+  .modal-dialog {
+    width: 90%;
+  }
+}

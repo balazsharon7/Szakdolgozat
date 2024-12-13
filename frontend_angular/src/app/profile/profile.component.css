@@ -1,0 +1,87 @@
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+  }
+  
+
+  .list-group-item {
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+  }
+  
+  .list-group-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+
+  .btn-warning {
+    color: white;
+    background-color: #f0ad4e;
+  }
+  
+  .btn-warning:hover {
+    background-color: #ec971f;
+  }
+  
+
+  @media (max-width: 768px) {
+    .btn {
+      font-size: 0.9rem;
+    }
+  
+    .list-group-item {
+      padding: 15px;
+    }
+  }
+  .card {
+    border-radius: 10px;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .card h3 {
+    font-weight: bold;
+  }
+  
+  .btn {
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .btn:hover {
+    transform: scale(1.05);
+  }
+  .calendar-container {
+    margin: 20px auto;
+    max-width: 1000px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .full-calendar {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  .calendar-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .full-calendar {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .full-calendar .fc-toolbar-title {
+    font-size: 1.5rem;
+    color: #4CAF50;
+  }
+  
+  

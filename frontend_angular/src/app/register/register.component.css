@@ -1,0 +1,40 @@
+body, .registration-page {
+  background: url('../../assets/x4aqrc_1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Arial', sans-serif;
+  
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card h1 {
+  font-size: 1.75rem;
+  color: #0d47a1;
+  font-weight: bold;
+}
+
+.alert {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.alert-success {
+  background-color: #d0f0c0;
+  color: #33691e;
+}
+
+.alert-danger {
+  background-color: #ffcccb;
+  color: #b71c1c;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #0d47a1;
+}
+
+.invalid-feedback small {
+  color: #b71c1c;
+}

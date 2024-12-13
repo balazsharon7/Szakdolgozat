@@ -1,0 +1,105 @@
+<section class="registration-page">
+  <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg w-100" style="max-width: 500px;">
+      <div class="card-body">
+        <h1 class="text-center text-primary mb-4">Új fiók regisztrálása</h1>
+      
+        <div *ngIf="isErrorMessage" class="alert alert-danger text-center">
+          {{ errorMessage }}
+        </div>
+     
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      
+          <div class="mb-3">
+            <label for="email" class="form-label">E-mail:</label>
+            <input
+              id="email"
+              formControlName="email"
+              type="email"
+              class="form-control"
+              placeholder="E-mail cím"
+            />
+            <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="text-danger">
+              <small *ngIf="f['email'].hasError('required')">Az e-mail megadása kötelező</small>
+              <small *ngIf="f['email'].hasError('email')">Érvénytelen e-mail formátum</small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="uName" class="form-label">Felhasználónév:</label>
+            <input
+              id="uName"
+              formControlName="uName"
+              type="text"
+              class="form-control"
+              placeholder="Felhasználónév"
+            />
+            <div *ngIf="f['uName'].invalid && (f['uName'].dirty || f['uName'].touched)" class="text-danger">
+              <small *ngIf="f['uName'].hasError('required')">A felhasználónév megadása kötelező</small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Jelszó:</label>
+            <input
+              id="password"
+              formControlName="password"
+              type="password"
+              class="form-control"
+              placeholder="Jelszó"
+            />
+            <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="text-danger">
+              <small *ngIf="f['password'].hasError('required')">A jelszó megadása kötelező</small>
+              <small *ngIf="f['password'].hasError('minlength')">A jelszónak legalább 6 karakter hosszúnak kell lennie</small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="role" class="form-label">Szerepkör:</label>
+            <select id="role" formControlName="role" class="form-select">
+              <option value="">Válasszon szerepkört...</option>
+              <option value="CUSTOMER">Vásárló</option>
+              <option value="BUSINESS">Vállalkozó</option>
+            </select>
+            <div *ngIf="f['role'].invalid && (f['role'].dirty || f['role'].touched)" class="text-danger">
+              <small *ngIf="f['role'].hasError('required')">A szerepkör megadása kötelező</small>
+            </div>
+          </div>
+
+         
+          <div class="mb-3 form-check">
+            <input
+              type="checkbox"
+              id="privacyPolicy"
+              formControlName="privacyPolicy"
+              class="form-check-input"
+            />
+            <label for="privacyPolicy" class="form-check-label">
+              Elfogadom az adatvédelmi szabályzatot
+            </label>
+          </div>
+          <div *ngIf="f['privacyPolicy'].invalid && (f['privacyPolicy'].dirty || f['privacyPolicy'].touched)" class="text-danger">
+            <small>Az adatvédelmi szabályzat elfogadása kötelező!</small>
+          </div>
+          
+
+       
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary" [disabled]="!myForm.valid">
+              Regisztrálás
+            </button>
+          </div>
+        </form>
+
+  
+        <div *ngIf="isSuccessful" class="alert alert-success mt-3 text-center">
+          {{ successfulMessage }}
+        </div>
+        <div *ngIf="isErrorMessage" class="alert alert-danger mt-3 text-center">
+          {{ errorMessage }}
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
